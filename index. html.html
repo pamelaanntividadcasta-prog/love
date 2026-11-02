@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You ♡</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, #123746, #080d12, #000);
+    color: white;
+    font-family: Georgia, serif;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 550px;
+    text-align: center;
+}
+
+h1 {
+    color: #35eaff;
+    text-shadow: 0 0 15px #35eaff;
+}
+
+.subtitle {
+    color: #a5dce5;
+    font-size: 14px;
+    margin-bottom: 35px;
+}
+
+/* ENVELOPE */
+
+.envelope-area {
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 900px;
+}
+
+.envelope {
+    width: 320px;
+    height: 200px;
+    position: relative;
+    cursor: pointer;
+    background: #12323e;
+    border: 2px solid #35eaff;
+    border-radius: 10px;
+    box-shadow: 0 0 25px #00d9ff55;
+}
+
+.paper {
+    position: absolute;
+    background: white;
+    color: #12323e;
+    width: 85%;
+    height: 85%;
+    left: 7.5%;
+    bottom: 5%;
+    padding-top: 25px;
+    transition: .7s;
+    font-style: italic;
+}
+
+.flap {
+    position: absolute;
+    inset: 0;
+    background: #176075;
+    clip-path: polygon(0 0, 100% 0, 50% 60%);
+    transform-origin: top;
+    transition: .7s;
+    z-index: 3;
+}
+
+.front {
+    position: absolute;
+    inset: 0;
+    background: #0b2732;
+    clip-path: polygon(0 0, 50% 58%, 100% 0,
+    100% 100%, 0 100%);
+}
+
+.seal {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: black;
+    border: 2px solid #35eaff;
+    color: #35eaff;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    z-index: 4;
+}
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 0;
+}
+
+.envelope.open .paper {
+    transform: translateY(-60px);
+}
+
+.envelope.open .seal {
+    opacity: 0;
+}
+
+/* LETTER */
+
+.letter {
+    display: none;
+    background: #101b23;
+    border: 1px solid #35eaff;
+    border-radius: 18px;
+    padding: 35px 25px;
+    min-height: 300px;
+    box-shadow: 0 0 25px #00d9ff33;
+}
+
+.letter.show {
+    display: block;
+    animation: appear .5s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-title {
+    color: #35eaff;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+
+.message {
+    font-size: 21px;
+    line-height: 1.7;
+    color: #e6faff;
+    white-space: pre-line;
+}
+
+button {
+    cursor: pointer;
+    border: 1px solid #35eaff;
+    background: #35eaff;
+    color: #061116;
+    padding: 12px 22px;
+    border-radius: 25px;
+    font-weight: bold;
+    margin: 15px 5px 0;
+}
+
+button:hover {
+    box-shadow: 0 0 15px #35eaff;
+}
+
+.back {
+    background: transparent;
+    color: #35eaff;
+}
+
+.progress {
+    color: #70b9c5;
+    font-size: 11px;
+    margin-top: 20px;
+    letter-spacing: 3px;
+}
+
+#restart {
+    display: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>For Someone Special ♡</h1>
+
+    <p class="subtitle" id="subtitle">
+        Someone has an answer for you...
+        Click the envelope to open.
+    </p>
+
+    <!-- ENVELOPE -->
+
+    <div class="envelope-area" id="envelopeArea">
+
+        <div class="envelope" id="envelope">
+
+            <div class="paper">
+                A little letter for you ♡
+            </div>
+
+            <div class="flap"></div>
+            <div class="front"></div>
+
+            <div class="seal">♡</div>
+
+        </div>
+
+    </div>
+
+    <!-- LETTER CONTENT -->
+
+    <div class="letter" id="letter">
+
+        <div class="page-title" id="pageTitle"></div>
+
+        <p class="message" id="message"></p>
+
+        <button class="back" id="back">
+            ← Back
+        </button>
+
+        <button id="next">
+            Next Page →
+        </button>
+
+        <div class="progress" id="progress"></div>
+
+    </div>
+
+    <button id="restart">
+        Read Again ♡
+    </button>
+
+</div>
+
+<script>
+
+// LETTER PAGES
+
+const pages = [
+
+{
+title: "PAGE 01 • A LITTLE INTRO",
+message: `Hi! HAHAHA.
+
+Alam mo, ang tagal kong pinag-isipan kung ano nga ba mangyayari saten.
+
+Gusto ko kasi na kahit simpleng lang like masaya tayo,and to be special nadin.`
+},
+
+{
+title: "PAGE 02 • MY LITTLE CONFESSION",
+message: `First of all, thank you ali.
+
+Thank you sa patience, effort, time, and sa lahat ng ways na pinaparamdam mong special ako.
+
+I appreciate everything, even the little things that you do.
+
+And honestly, I'm happy na nakilala kita, Thankyouu kasi nagchat ka.`
+},
+
+{
+title: "PAGE 03 • WAIT FOR IT...",
+message: `So after thinking about everything...
+
+I realized na gusto kong bigyan tayo ng chance.
+
+I want to experience this new chapter with you.
+
+But wait...
+
+Do i? HAHAHA.`
+},
+
+{
+title: "PAGE 04 • THE ANSWER",
+message: `SO YESSS! ♡
+
+I'll be your official girlfriend!
+
+Thank you for choosing me and for being patient while waiting for my answer.
+
+I hope we make this relationship full of love, respect, honesty, effort, and unforgettable memories.
+
+Let's start our new chapter together.
+
+— ali  ♡`
+}
+
+];
+
+let currentPage = 0;
+
+// ELEMENTS
+
+const envelope = document.getElementById("envelope");
+const envelopeArea = document.getElementById("envelopeArea");
+const letter = document.getElementById("letter");
+
+const message = document.getElementById("message");
+const pageTitle = document.getElementById("pageTitle");
+const progress = document.getElementById("progress");
+
+const next = document.getElementById("next");
+const back = document.getElementById("back");
+const restart = document.getElementById("restart");
+
+// OPEN ENVELOPE
+
+envelope.addEventListener("click", function() {
+
+    envelope.classList.add("open");
+
+    document.getElementById("subtitle").textContent =
+    "Opening your little surprise... ♡";
+
+    setTimeout(function() {
+
+        envelopeArea.style.display = "none";
+        letter.classList.add("show");
+
+        showPage();
+
+    }, 700);
+
+});
+
+// DISPLAY PAGE
+
+function showPage() {
+
+    pageTitle.textContent = pages[currentPage].title;
+
+    message.textContent = pages[currentPage].message;
+
+    progress.textContent =
+    `PAGE ${currentPage + 1} OF ${pages.length}`;
+
+    back.style.visibility =
+    currentPage === 0 ? "hidden" : "visible";
+
+    next.style.display =
+    currentPage === pages.length - 1 ? "none" : "inline-block";
+
+    if (currentPage === pages.length - 1) {
+        restart.style.display = "inline-block";
+    } else {
+        restart.style.display = "none";
+    }
+
+}
+
+// NEXT PAGE
+
+next.addEventListener("click", function() {
+
+    if (currentPage < pages.length - 1) {
+
+        currentPage++;
+        showPage();
+
+    }
+
+});
+
+// BACK PAGE
+
+back.addEventListener("click", function() {
+
+    if (currentPage > 0) {
+
+        currentPage--;
+        showPage();
+
+    }
+
+});
+
+// RESTART
+
+restart.addEventListener("click", function() {
+
+    currentPage = 0;
+
+    letter.classList.remove("show");
+
+    envelopeArea.style.display = "flex";
+
+    envelope.classList.remove("open");
+
+    document.getElementById("subtitle").textContent =
+    "Someone has an answer for you... Click the envelope.";
+
+});
+
+</script>
+
+</body>
+</html>
